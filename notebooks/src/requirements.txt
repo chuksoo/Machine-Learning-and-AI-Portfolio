@@ -1,0 +1,13 @@
+catboost==1.2.5
+imblearn==0.0
+ipython==8.23.0
+ipywidgets==8.1.2
+lightgbm==4.3.0
+matplotlib==3.0.3
+numpy==1.16.3
+pandas==0.24.2
+scikit_learn==1.4.2
+seaborn==0.9.0
+shap==0.45.0
+xgboost==2.0.3
+ydata_profiling==4.7.0
