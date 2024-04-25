@@ -102,7 +102,7 @@ preprocessed_features = pd.DataFrame(preprocessed_data, columns=num_feature_cols
 X_train, X_test, y_train, y_test = train_test_split(preprocessed_features, target, test_size=0.20, random_state=12345)
 
 # build the model
-lgbm_model = LGBMClassifier(learning_rate=0.05, n_estimators=200, num_leaves=31)
+lgbm_model = LGBMClassifier(learning_rate=0.1, n_estimators=200, num_leaves=31, verbose=0)
 
 # train the model on training data
 lgbm_model.fit(X_train, y_train) 
@@ -117,4 +117,5 @@ print('Log loss is: {:.3f}'.format(log_loss(y_test, lgbm_pred_proba)))
 print('F1 score: {:.3f}'.format(f1_score(y_test, lgbm_pred, average="weighted")))
 
 # save the model to disk
-joblib.dump(lgbm_model, "transactions_lgbm_model.sav")
+with open('./streamlit_app/transactions-deploy/transactions_lgbm_model.sav', 'wb') as model_file:
+    joblib.dump(lgbm_model, model_file)
