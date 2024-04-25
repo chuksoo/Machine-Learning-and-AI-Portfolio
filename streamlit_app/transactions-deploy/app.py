@@ -53,9 +53,9 @@ with col2:
     dateOfLastAddressChangeDayofWeek = st.number_input(label="Day of week of last address change")
 
     # Streamlit interface to input data
-    def prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, accountOpenDayofWeek, 
-                   creditLimit, currentExpMonth, customerId, posEntryMode, transactionMonth, transactionHour, transactionMinutes, 
-                   transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek):
+    def prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, 
+                   accountOpenDayofWeek, creditLimit, currentExpMonth, posEntryMode, transactionMonth, transactionHour, 
+                   transactionMinutes, transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth):
         # create a df with input
         df_input = pd.DataFrame({
                 'availableMoney': availableMoney,
@@ -68,7 +68,6 @@ with col2:
                 'accountOpenDayofWeek': accountOpenDayofWeek,
                 'creditLimit': creditLimit,
                 'currentExpMonth': currentExpMonth,
-                'customerId': customerId,
                 'posEntryMode': posEntryMode,
                 'transactionMonth': transactionMonth,
                 'transactionHour': transactionHour,
@@ -76,8 +75,7 @@ with col2:
                 'transactionSeconds': transactionSeconds,
                 'posConditionCode': posConditionCode,
                 'cardPresent': cardPresent,
-                'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth,
-                'dateOfLastAddressChangeDayofWeek': dateOfLastAddressChangeDayofWeek
+                'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth
         })
 
         prediction = model.predict(df_input)
@@ -85,9 +83,9 @@ with col2:
     
     # Predict button
     if st.button('Predict'):
-        predict = prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, accountOpenDayofWeek, 
-                   creditLimit, currentExpMonth, customerId, posEntryMode, transactionMonth, transactionHour, transactionMinutes, 
-                   transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek)
+        predict = prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, 
+                   accountOpenDayofWeek, creditLimit, currentExpMonth, posEntryMode, transactionMonth, transactionHour, 
+                   transactionMinutes, transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth)
         if predict == 0:
             st.write("This transaction is not fraudulent.")
         else:
