@@ -53,26 +53,43 @@ with col2:
     dateOfLastAddressChangeDayofWeek = st.number_input(label="Day of week of last address change")
 
     # Streamlit interface to input data
-    def prediction(stream)
-    data = {
-        'availableMoney': availableMoney,
-        'transactionAmount': transactionAmount,
-       'merchantName': merchantName,
-       'merchantCategoryCode': merchantCategoryCode,
-        'accountNumber': accountNumber,
-        'currentBalance': currentBalance,
-        'accountOpenMonth': accountOpenMonth,
-        'accountOpenDayofWeek': accountOpenDayofWeek,
-        'creditLimit': creditLimit,
-        'currentExpMonth': currentExpMonth,
-        'posEntryMode': posEntryMode,
-        'transactionMonth': transactionMonth,
-        'transactionHour': transactionHour,
-        'transactionMinutes': transactionMinutes,
-        'transactionSeconds': transactionSeconds,
-        'posConditionCode': posConditionCode,
-        'posEntryMode': posEntryMode,
-        'cardPresent': cardPresent,
-        'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth,
-        'dateOfLastAddressChangeDayofWeek': dateOfLastAddressChangeDay}
-    data = pd.DataFrame(data)
+    def prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, accountOpenDayofWeek, 
+                   creditLimit, currentExpMonth, customerId, posEntryMode, transactionMonth, transactionHour, transactionMinutes, 
+                   transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek):
+        # create a df with input
+        df_input = pd.DataFrame({
+                'availableMoney': availableMoney,
+                'transactionAmount': transactionAmount,
+                'merchantName': merchantName,
+                'merchantCategoryCode': merchantCategoryCode,
+                'accountNumber': accountNumber,
+                'currentBalance': currentBalance,
+                'accountOpenMonth': accountOpenMonth,
+                'accountOpenDayofWeek': accountOpenDayofWeek,
+                'creditLimit': creditLimit,
+                'currentExpMonth': currentExpMonth,
+                'customerId': customerId,
+                'posEntryMode': posEntryMode,
+                'transactionMonth': transactionMonth,
+                'transactionHour': transactionHour,
+                'transactionMinutes': transactionMinutes,
+                'transactionSeconds': transactionSeconds,
+                'posConditionCode': posConditionCode,
+                'cardPresent': cardPresent,
+                'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth,
+                'dateOfLastAddressChangeDayofWeek': dateOfLastAddressChangeDayofWeek
+        })
+
+        prediction = model.predict(df_input)
+        return prediction
+    
+    # Predict button
+    if st.button('Predict'):
+        predict = prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, accountOpenDayofWeek, 
+                   creditLimit, currentExpMonth, customerId, posEntryMode, transactionMonth, transactionHour, transactionMinutes, 
+                   transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek)
+        if predict == 0:
+            st.write("This transaction is not fraudulent.")
+        else:
+            st.write("This transaction is fraudulent.")
+            
