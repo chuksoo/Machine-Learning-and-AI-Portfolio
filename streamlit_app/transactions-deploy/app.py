@@ -22,7 +22,7 @@ st.sidebar.write("This app uses a machine learning model to predict whether a gi
 st.sidebar.write("The model is trained on a dataset of credit card transactions.")
 
 # Load the model
-with open('./streamlit_app/transactions-deploy/transactions_lgbm_model.sav', 'rb') as model_file:
+with open('transactions_lgbm_model.sav', 'rb') as model_file:
     model = joblib.load(model_file)
 
 # Streamlit interface to input data
@@ -33,36 +33,32 @@ with col1:
     transactionAmount = st.number_input(label="Transaction Amount")
     merchantName = st.number_input(label="Merchant Name")
     merchantCategoryCode = st.number_input(label="Merchant Category Code")
-    accountNumber = st.number_input(label="Account Number")
     currentBalance = st.number_input(label="Current Balance")
     accountOpenMonth = st.number_input(label="Account Open Month")
     accountOpenDayofWeek = st.number_input(label="Account Open Day of Week")
     creditLimit = st.number_input(label="Credit Limit")
-    currentExpMonth = st.number_input(label="Current Expiration Month")
 
 with col2:
+    currentExpMonth = st.number_input(label="Current Expiration Month")
     posEntryMode = st.number_input(label="Pos Entry Mode")
     transactionMonth = st.number_input(label="Transaction Month")
     transactionHour = st.number_input(label="Transaction Hour")
     transactionMinutes = st.number_input(label="Transaction Minutes")
-    transactionSeconds = st.number_input(label="Transaction Seconds")
     posConditionCode = st.number_input(label="Pos Condition Code")
-    posEntryMode = st.number_input(label="Pos Entry Mode")
     cardPresent = st.number_input(label="Card Present")
     dateOfLastAddressChangeMonth = st.number_input(label="Month of last address change")
     dateOfLastAddressChangeDayofWeek = st.number_input(label="Day of week of last address change")
 
     # Streamlit interface to input data
-    def prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, 
+    def prediction(availableMoney, transactionAmount, merchantName, merchantCategoryCode, currentBalance, accountOpenMonth, 
                    accountOpenDayofWeek, creditLimit, currentExpMonth, posEntryMode, transactionMonth, transactionHour, 
-                   transactionMinutes, transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth):
+                   transactionMinutes, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek):
         # create a df with input
         df_input = pd.DataFrame({
                 'availableMoney': availableMoney,
                 'transactionAmount': transactionAmount,
                 'merchantName': merchantName,
                 'merchantCategoryCode': merchantCategoryCode,
-                'accountNumber': accountNumber,
                 'currentBalance': currentBalance,
                 'accountOpenMonth': accountOpenMonth,
                 'accountOpenDayofWeek': accountOpenDayofWeek,
@@ -72,10 +68,10 @@ with col2:
                 'transactionMonth': transactionMonth,
                 'transactionHour': transactionHour,
                 'transactionMinutes': transactionMinutes,
-                'transactionSeconds': transactionSeconds,
                 'posConditionCode': posConditionCode,
                 'cardPresent': cardPresent,
-                'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth
+                'dateOfLastAddressChangeMonth': dateOfLastAddressChangeMonth,
+                'dateOfLastAddressChangeDayofWeek': dateOfLastAddressChangeDayofWeek
         })
 
         prediction = model.predict(df_input)
@@ -83,9 +79,9 @@ with col2:
     
     # Predict button
     if st.button('Predict'):
-        predict = prediction(availableMoney, merchantName, merchantCategoryCode, accountNumber, currentBalance, accountOpenMonth, 
+        predict = prediction(availableMoney, transactionAmount, merchantName, merchantCategoryCode, currentBalance, accountOpenMonth, 
                    accountOpenDayofWeek, creditLimit, currentExpMonth, posEntryMode, transactionMonth, transactionHour, 
-                   transactionMinutes, transactionSeconds, posConditionCode, cardPresent, dateOfLastAddressChangeMonth)
+                   transactionMinutes, posConditionCode, cardPresent, dateOfLastAddressChangeMonth, dateOfLastAddressChangeDayofWeek)
         if predict == 0:
             st.write("This transaction is not fraudulent.")
         else:
